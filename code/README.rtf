@@ -1,0 +1,17 @@
+{\rtf1\ansi\ansicpg936\cocoartf2511
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Our project mainly uses three part of code to finish a single model, which are \'93\'94data_processing\'94, \'93model\'94 and \'93evaluation\'94. From raw data input to finally visualizing the model\'92s results, you need to go through these processes: read the excel file and doing preprocessing with it to turn it into readable input, then fit the input to the model, then evaluate the model. \
+\
+The first part \'93data_processing\'94 includes 7 different functions: 1. \'93interpolate_gaussian\'94, which is exactly the same with the previous group, is used for interpolated the inner data point between two given cash flow value. You can specify the number in between two data point by the argument \'93num_between\'94 and also change the \'93var\'94 to modify the variance of stochastic interpolation. 2. \'93data_process\'94 take the raw data (actual cash flow contribution rate), take the log different and do the interpolation using \'93interpolate_gaussian\'94. From \'93data_process\'94 we can turn the quarterly data point into log difference then interpolate it to the sequential data. 3. \'93get_macro\'94 is used for get data from the excel file, though it is called \'93macro\'94, it is also use for getting cash flow data together with macroeconomic features. 4. \'93prep_dat\'94 is used for creating the rolling window for prediction. From the sequence get from get_macro, it then turn into shape of (271,1101), which means we have a input length of 1101, and each consists of 270 days value as X and the \'93Q_next\'94 as y value. 5. \'93trans_dat\'94 is built upon prep_dat, but it allows to take a pandas dataframe (multivariable input) into shape of input that could be read by LSTM model. For example, for a input with 19 macros and 1 cash flow value, the shape of the result would be (1101, 270, 20), which represents length of input, length of time_step, number of features respectively. 6. Finally, split_dataset_x & split_dataset_y is used for splitting the dataset into 70/30 training and testing set for X and y. \
+\
+The second part \'93model\'94 includes four different model architectures. \'93\'94build_model\'94 is used for building the baseline LSTM. \'93build_model_encoder\'94 is for building Encoder-Decoder LSTM. \'93build_model_conv\'94 is used for building the 1-d CNN-LSTM model. Finally \'93\'94build_model_conv2\'94 is for building the ConvLSTM model. There are some shared hyperparameters and we keep them the same: we all used 100 training epochs with mini-batch size of 100, and used ReLU activation function for each layer, optimizing the model with Adam Optimizer. For each model\'92s introduction one might refer to our report to see more about the details. \
+\
+The final part \'93evaluation\'94 consists of \'93\'94evaluation_model\'94 and \'93evaluation_model_conv\'94. \'93evaluation_model_conv\'94 is special for evaluating ConvLSTM model as the X\'92s shape is different from the other three models. Except for the input shape difference, all the evaluation functions will provide the training mse and testing mse, then visualizing the training loss and plot the actual values versus predicted values for both training set and testing set. \
+\
+\
+}
